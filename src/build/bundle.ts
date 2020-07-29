@@ -5,8 +5,9 @@ import { existsSync, writeFileSync } from 'fs';
 import mkdirp from 'mkdirp';
 import chokidar from 'chokidar';
 import { DEFAULT_ERROR_KEY } from '../constants';
+import { getExternal } from '../utils/getExternal';
 
-export default async function bundle(opts: {
+export default async function (opts: {
   cwd: string;
   formatType: IFormatType;
   platform: IPlatform;
@@ -18,16 +19,17 @@ export default async function bundle(opts: {
 }) {
   transform();
 
-  // start watch
-  const watcher = chokidar.watch(join(opts.cwd, 'src/**/*'), {
-    ignoreInitial: true,
-  });
-  watcher.on('all', (event, filePath) => {
-    transform();
-  });
-  opts.onUpdate({
-    status: 'watch',
-  });
+  if (opts.watch) {
+    const watcher = chokidar.watch(join(opts.cwd, 'src/**/*'), {
+      ignoreInitial: true,
+    });
+    watcher.on('all', (event, filePath) => {
+      transform();
+    });
+    opts.onUpdate({
+      status: 'watch',
+    });
+  }
 
   function transform() {
     let result: BuildResult | undefined;
@@ -38,7 +40,7 @@ export default async function bundle(opts: {
         format: opts.formatType === 'umd' ? 'iife' : opts.formatType,
         platform: opts.platform,
         globalName: opts.globalName,
-        external: [],
+        external: getExternal({ cwd: opts.cwd, formatType: opts.formatType }),
         define: {},
         write: false,
         bundle: true,

@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "esbuild --minify --platform=node --external:esbuild --external:sucrase --external:fsevents --target=node10 --bundle src/index.tsx > dist/index.js"
+    "build": "node scripts/father.js"
   },
   "dependencies": {
     "esbuild": "^0.6.4",

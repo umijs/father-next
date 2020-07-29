@@ -14,6 +14,7 @@ import { DEFAULT_PLATFORM } from './constants';
 import bundle from './build/bundle';
 import fileToFile from './build/fileToFile';
 import { getFileName } from './utils/getFileName';
+import { existsSync } from 'fs';
 
 function getDataFromConfig(opts: {
   config: IConfig;
@@ -79,7 +80,16 @@ function Package(props: { packageName: string; package: IUIPackage }) {
   );
 }
 
+function ItemError(props: { error: Error }) {
+  return (
+    <>
+      <Text>{props.error.stack}</Text>
+    </>
+  );
+}
+
 function Item(props: { item: IUIItem }) {
+  const errors = props.item.errors || {};
   return (
     <Text>
       <Text> - </Text>
@@ -92,6 +102,9 @@ function Item(props: { item: IUIItem }) {
       ) : (
         <Text>{` (${props.item.completed}/${props.item.total})`}</Text>
       )}
+      {Object.keys(errors).map((key) => {
+        return <ItemError key={key} error={errors[key]} />;
+      })}
       <Newline />
     </Text>
   );
