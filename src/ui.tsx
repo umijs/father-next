@@ -217,8 +217,8 @@ export function App(props: { args: yParser.Arguments }) {
       try {
         await init();
       } catch (e) {
-        // console.error(chalk.red('Build failed'));
-        // console.error(e);
+        console.error(chalk.red('Build failed'));
+        console.error(e);
       }
     })();
   }, []);
