@@ -15,6 +15,7 @@ type IPlatform = 'node' | 'browser';
 interface IEntryPoints {
   [entryPath: string]: IBasicConfig & {
     globalName?: string;
+    targetFilePath?: string;
   };
 }
 

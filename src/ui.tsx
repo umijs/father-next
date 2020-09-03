@@ -47,12 +47,14 @@ function getDataFromConfig(opts: {
         memo.push({
           ...base,
           entryPoint: fileName,
-          targetFilePath: join(
-            'dist',
-            getFileName(fileName, {
-              formatType,
-            }),
-          ),
+          targetFilePath: entryPointConfig.targetFilePath
+            ? join('dist', entryPointConfig.targetFilePath)
+            : join(
+                'dist',
+                getFileName(fileName, {
+                  formatType,
+                }),
+              ),
           globalName: entryPointConfig.globalName || formatOpts.globalName,
           bundle,
           platform: entryPointConfig.platform || base.platform,

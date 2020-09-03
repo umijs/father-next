@@ -1,5 +1,5 @@
 import { BuildResult, buildSync } from 'esbuild';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { TextDecoder } from 'util';
 import { existsSync, writeFileSync } from 'fs';
 import mkdirp from 'mkdirp';
@@ -65,10 +65,9 @@ export default async function (opts: {
       const file = result.outputFiles[0];
       const textDecoder = new TextDecoder('utf-8');
       const contents = textDecoder.decode(file.contents);
-      if (!existsSync(join(opts.cwd, 'dist'))) {
-        mkdirp.sync(join(opts.cwd, 'dist'));
-      }
-      writeFileSync(join(opts.cwd, opts.targetFilePath), contents, 'utf-8');
+      const target = join(opts.cwd, opts.targetFilePath);
+      mkdirp.sync(dirname(target));
+      writeFileSync(target, contents, 'utf-8');
     }
   }
 }
