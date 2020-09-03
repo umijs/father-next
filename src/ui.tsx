@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Static, Box, Newline, Text } from 'ink';
-import { join } from 'path';
+import { join, isAbsolute, relative } from 'path';
 import yParser from 'yargs-parser';
 import chalk from 'chalk';
 import { useImmer } from 'use-immer';
@@ -17,6 +17,7 @@ import { getFileName } from './utils/getFileName';
 import { existsSync } from 'fs';
 
 function getDataFromConfig(opts: {
+  cwd: string;
   config: IConfig;
   package: string;
 }): IUIPackage {
@@ -44,17 +45,22 @@ function getDataFromConfig(opts: {
       };
       Object.keys(entryPoints).forEach((fileName) => {
         const entryPointConfig = entryPoints[fileName];
+        const relativeTargetFilePath = entryPointConfig.targetFilePath
+          ? join('dist', entryPointConfig.targetFilePath)
+          : join(
+              'dist',
+              getFileName(fileName, {
+                formatType,
+              }),
+            );
+
         memo.push({
           ...base,
           entryPoint: fileName,
-          targetFilePath: entryPointConfig.targetFilePath
-            ? join('dist', entryPointConfig.targetFilePath)
-            : join(
-                'dist',
-                getFileName(fileName, {
-                  formatType,
-                }),
-              ),
+          // targetFilePath: path.join(__dirname, 'out/index.js') => out/index.js
+          targetFilePath: isAbsolute(entryPointConfig.targetFilePath || '')
+            ? relative(opts.cwd, entryPointConfig.targetFilePath || '')
+            : relativeTargetFilePath,
           globalName: entryPointConfig.globalName || formatOpts.globalName,
           bundle,
           platform: entryPointConfig.platform || base.platform,
@@ -175,12 +181,13 @@ export function App(props: { args: yParser.Arguments }) {
       for (const pkg of pkgs) {
         const pkgConfig = getPkgConfig({ config, pkg });
         packages[pkg] = getDataFromConfig({
+          cwd,
           config: pkgConfig,
           package: pkg,
         });
       }
     } else {
-      packages['.'] = getDataFromConfig({ config, package: '.' });
+      packages['.'] = getDataFromConfig({ cwd, config, package: '.' });
     }
 
     updateState((draft) => {
