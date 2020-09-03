@@ -9,7 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "node scripts/father.js"
+    "build": "node scripts/father.js",
+    "prepublishOnly": "np --no-cleanup --yolo --no-publish"
   },
   "dependencies": {
     "esbuild": "^0.6.4",
@@ -28,6 +29,7 @@
     "immer": "^7.0.7",
     "ink": "^3.0.0",
     "mkdirp": "^1.0.4",
+    "np": "^6.5.0",
     "pirates": "^4.0.1",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
