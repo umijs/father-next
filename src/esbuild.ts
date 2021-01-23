@@ -1,4 +1,4 @@
-import { startService, Service } from 'esbuild';
+import { Service, startService } from 'esbuild';
 
 let service: Service;
 

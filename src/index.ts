@@ -1,5 +1,5 @@
-import React from 'react';
 import { render } from 'ink';
+import React from 'react';
 import yParser from 'yargs-parser';
 import { App } from './ui';
 

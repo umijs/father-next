@@ -1,5 +1,5 @@
-import { addHook } from 'pirates';
 import { transformSync } from 'esbuild';
+import { addHook } from 'pirates';
 import { transform as transformImports } from 'sucrase';
 import { CONFIG_FILE } from './constants';
 

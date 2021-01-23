@@ -1,7 +1,5 @@
-import { extname, join, dirname } from 'path';
+import chokidar from 'chokidar';
 import { transformSync } from 'esbuild';
-import { transform as transformImports } from 'sucrase';
-import glob from 'glob';
 import {
   copyFileSync,
   existsSync,
@@ -9,8 +7,10 @@ import {
   statSync,
   writeFileSync,
 } from 'fs';
+import glob from 'glob';
 import mkdirp from 'mkdirp';
-import chokidar from 'chokidar';
+import { dirname, extname, join } from 'path';
+import { transform as transformImports } from 'sucrase';
 import { DEFAULT_GLOB_IGNORED } from '../constants';
 
 export default async function (opts: {

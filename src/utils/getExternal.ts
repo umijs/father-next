@@ -1,5 +1,5 @@
-import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 
 export function getExternal(opts: {
   cwd: string;

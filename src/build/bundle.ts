@@ -1,9 +1,9 @@
-import { BuildResult, buildSync } from 'esbuild';
-import { join, dirname } from 'path';
-import { TextDecoder } from 'util';
-import { existsSync, writeFileSync } from 'fs';
-import mkdirp from 'mkdirp';
 import chokidar from 'chokidar';
+import { BuildResult, buildSync } from 'esbuild';
+import { writeFileSync } from 'fs';
+import mkdirp from 'mkdirp';
+import { dirname, join } from 'path';
+import { TextDecoder } from 'util';
 import { DEFAULT_ERROR_KEY } from '../constants';
 import { getExternal } from '../utils/getExternal';
 

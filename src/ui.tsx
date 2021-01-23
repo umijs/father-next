@@ -1,20 +1,19 @@
-import React, { useEffect } from 'react';
-import { Static, Box, Newline, Text } from 'ink';
-import { join, isAbsolute, relative } from 'path';
-import yParser from 'yargs-parser';
 import chalk from 'chalk';
+import { Newline, Text } from 'ink';
+import { isAbsolute, join, relative } from 'path';
+import React, { useEffect } from 'react';
 import { useImmer } from 'use-immer';
+import yParser from 'yargs-parser';
+import bundle from './build/bundle';
+import fileToFile from './build/fileToFile';
+import { DEFAULT_PLATFORM } from './constants';
 import { register } from './register';
 import { compatESModuleRequire } from './utils/compatESModuleRequire';
 import { getConfig } from './utils/getConfig';
-import { isLerna } from './utils/isLerna';
+import { getFileName } from './utils/getFileName';
 import { getLernaPackages } from './utils/getLernaPackages';
 import { getPkgConfig } from './utils/getPkgConfig';
-import { DEFAULT_PLATFORM } from './constants';
-import bundle from './build/bundle';
-import fileToFile from './build/fileToFile';
-import { getFileName } from './utils/getFileName';
-import { existsSync } from 'fs';
+import { isLerna } from './utils/isLerna';
 
 function getDataFromConfig(opts: {
   cwd: string;
