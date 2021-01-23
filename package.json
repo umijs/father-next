@@ -21,8 +21,7 @@
   "scripts": {
     "build": "node scripts/father.js",
     "prettier": "prettier -w ./src",
-    "release": "np",
-    "prepublishOnly": "np --yolo"
+    "prepublishOnly": "np --yolo --no-publish"
   },
   "dependencies": {
     "esbuild": "^0.8.34",
