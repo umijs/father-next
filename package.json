@@ -1,6 +1,6 @@
 {
   "name": "father-next",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "bin": {
     "father-next": "bin/father.js"
   },
