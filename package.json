@@ -17,7 +17,7 @@
   },
   "license": "MIT",
   "bugs": "http://github.com/umijs/father-next/issues",
-  "homepage": "https://github.com/umijs/father-next/tree/master/packages/umi#readme",
+  "homepage": "https://github.com/umijs/father-next#readme",
   "scripts": {
     "build": "node scripts/father.js",
     "prettier": "prettier -w ./src",
