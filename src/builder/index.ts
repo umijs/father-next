@@ -28,6 +28,7 @@ export default async (opts: {
   userConfig: IFatherConfig;
   cwd: string;
   pkg: IApi['pkg'];
+  watch: boolean;
 }) => {
   const configProviders = createConfigProviders(opts.userConfig, opts.pkg);
   const outputs = getProviderOutputs(configProviders);
@@ -47,6 +48,7 @@ export default async (opts: {
     await bundless({
       cwd: opts.cwd,
       configProvider: configProviders.bundless.esm,
+      watch: opts.watch,
     });
   }
 
@@ -54,6 +56,7 @@ export default async (opts: {
     await bundless({
       cwd: opts.cwd,
       configProvider: configProviders.bundless.cjs,
+      watch: opts.watch,
     });
   }
 };
