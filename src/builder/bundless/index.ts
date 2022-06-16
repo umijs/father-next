@@ -37,7 +37,6 @@ export default async (opts: {
     // process all matched items
     for (let item of filePaths) {
       const config = opts.configProvider.getConfigForFile(item);
-
       if (config) {
         let itemDistPath = path.join(
           config.output!,
@@ -45,7 +44,6 @@ export default async (opts: {
         );
         let itemDistAbsPath = path.join(opts.cwd, itemDistPath);
         const parentPath = path.dirname(itemDistAbsPath);
-
         // create parent directory if not exists
         if (!fs.existsSync(parentPath)) {
           fs.mkdirSync(parentPath, { recursive: true });
@@ -126,21 +124,50 @@ export default async (opts: {
     chokidar
       .watch(opts.configProvider.input, {
         ignoreInitial: true,
+        ignored: DEFAULT_BUNDLESS_IGNORES,
       })
-      .on('all', (event: string, filePath: string) => {
-        // TODO: 文件夹判断
-        if (event === 'unlink') {
-          const outputPath = declarationFileMap.get(winPath(filePath))!;
-          const name = path
-            .basename(filePath)
-            .replace(path.extname(filePath), '');
-          ['.js', '.d.ts', '.d.ts.map'].map((item) => {
-            fs.rmSync(path.join(outputPath, name + item));
+      .on('add', (filePath: string) => {
+        transfromFile([winPath(filePath)]);
+      })
+      .on('change', (filePath: string) => {
+        transfromFile([winPath(filePath)]);
+      })
+      .on('unlink', (filePath: string) => {
+        const outputPath = declarationFileMap.get(winPath(filePath))!;
+
+        if (!fs.existsSync(outputPath)) return;
+
+        const ext = path.extname(filePath);
+        const name = path.basename(filePath).replace(ext, '');
+
+        if (ext === '') {
+          fs.rmSync(path.join(outputPath, name), { force: true });
+        } else if (['.js', '.jsx'].includes(ext)) {
+          fs.rmSync(path.join(outputPath, name + '.js'), { force: true });
+        } else if (['.ts', '.tsx'].includes(ext)) {
+          ['.js', '.d.ts', '.d.ts.map'].map((ext) => {
+            fs.rmSync(path.join(outputPath, name + ext), { force: true });
           });
-          logger.event(`Removed successfully  files)`);
-        } else {
-          transfromFile([winPath(filePath)]);
         }
+
+        logger.event(`Removed ${filePath} successfully)`);
+      })
+      .on('unlinkDir', (dirPath: string) => {
+        // dirPath maybe is an absolute path
+        const relativeDirPath = winPath(
+          dirPath.replace(path.join(opts.cwd, '/'), ''),
+        );
+        const config = opts.configProvider.getConfigForFile(relativeDirPath);
+        const itemDistPath = path.join(
+          config.output!,
+          path.relative(config.input, relativeDirPath),
+        );
+        const itemDistAbsPath = path.join(opts.cwd, itemDistPath);
+
+        if (!fs.existsSync(itemDistAbsPath)) return;
+        fs.rmdirSync(itemDistAbsPath, { recursive: true });
+
+        logger.event(`Removed ${relativeDirPath} successfully)`);
       });
   }
 };
