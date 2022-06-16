@@ -1,4 +1,4 @@
-import { chalk, chokidar, glob, logger, winPath } from '@umijs/utils';
+import { chalk, chokidar, glob, lodash, logger, winPath } from '@umijs/utils';
 import fs from 'fs';
 import path from 'path';
 import type { BundlessConfigProvider } from '../config';
@@ -129,31 +129,47 @@ export default async (opts: {
       .on('add', (filePath: string) => {
         transfromFile([winPath(filePath)]);
       })
-      .on('change', (filePath: string) => {
-        transfromFile([winPath(filePath)]);
-      })
+      .on(
+        'change',
+        lodash.debounce((filePath: string) => {
+          transfromFile([winPath(filePath)]);
+        }, 300),
+      )
       .on('unlink', (filePath: string) => {
-        const outputPath = declarationFileMap.get(winPath(filePath))!;
+        const relativePath = winPath(
+          filePath.replace(path.join(opts.cwd, '/'), ''),
+        );
+        const config = opts.configProvider.getConfigForFile(relativePath);
+        const itemDistPath = path.join(
+          config.output!,
+          path.relative(config.input, relativePath),
+        );
+        const itemDistAbsPath = path.join(opts.cwd, itemDistPath);
+        const parentPath = path.dirname(itemDistAbsPath);
 
-        if (!fs.existsSync(outputPath)) return;
+        if (!fs.existsSync(parentPath)) return;
 
         const ext = path.extname(filePath);
         const name = path.basename(filePath).replace(ext, '');
 
         if (ext === '') {
-          fs.rmSync(path.join(outputPath, name), { force: true });
+          fs.rmSync(path.join(parentPath, name), { force: true });
         } else if (['.js', '.jsx'].includes(ext)) {
-          fs.rmSync(path.join(outputPath, name + '.js'), { force: true });
+          fs.rmSync(path.join(parentPath, name + '.js'), {
+            force: true,
+          });
         } else if (['.ts', '.tsx'].includes(ext)) {
           ['.js', '.d.ts', '.d.ts.map'].map((ext) => {
-            fs.rmSync(path.join(outputPath, name + ext), { force: true });
+            fs.rmSync(path.join(parentPath, name + ext), {
+              force: true,
+            });
           });
         }
 
         logger.event(`Removed ${filePath} successfully)`);
       })
       .on('unlinkDir', (dirPath: string) => {
-        // dirPath maybe is an absolute path
+        //  When the event is equal to unlinkDir, Path may be an absolute Path
         const relativeDirPath = winPath(
           dirPath.replace(path.join(opts.cwd, '/'), ''),
         );
