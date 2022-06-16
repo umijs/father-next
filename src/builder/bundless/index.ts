@@ -2,6 +2,7 @@ import { chalk, chokidar, glob, lodash, logger, winPath } from '@umijs/utils';
 import fs from 'fs';
 import path from 'path';
 import type { BundlessConfigProvider } from '../config';
+import { addUnWatch } from '../watch';
 import getDeclarations from './dts';
 import runLoaders from './loaders';
 
@@ -121,7 +122,7 @@ export default async (opts: {
   // TODO: watch mode
   if (opts.watch) {
     logger.event(`Start watching ${opts.configProvider.input} directory...`);
-    chokidar
+    const watcher = chokidar
       .watch(opts.configProvider.input, {
         ignoreInitial: true,
         ignored: DEFAULT_BUNDLESS_IGNORES,
@@ -185,5 +186,7 @@ export default async (opts: {
 
         logger.event(`Removed ${relativeDirPath} successfully)`);
       });
+
+    addUnWatch(() => watcher.close());
   }
 };
