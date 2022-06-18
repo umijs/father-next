@@ -2,7 +2,6 @@ import { chalk, chokidar, glob, lodash, logger, winPath } from '@umijs/utils';
 import fs from 'fs';
 import path from 'path';
 import type { BundlessConfigProvider } from '../config';
-import { addUnWatch } from '../watch';
 import getDeclarations from './dts';
 import runLoaders from './loaders';
 
@@ -21,7 +20,7 @@ function replacePathExt(filePath: string, ext: string) {
 export default async (opts: {
   cwd: string;
   configProvider: BundlessConfigProvider;
-  watch: boolean;
+  watch?: boolean;
 }) => {
   logger.info(
     `Bundless for ${chalk.yellow(
@@ -119,7 +118,6 @@ export default async (opts: {
   });
   await transfromFile(matches);
 
-  // TODO: watch mode
   if (opts.watch) {
     logger.event(`Start watching ${opts.configProvider.input} directory...`);
     const watcher = chokidar
@@ -184,9 +182,9 @@ export default async (opts: {
         if (!fs.existsSync(itemDistAbsPath)) return;
         fs.rmdirSync(itemDistAbsPath, { recursive: true });
 
-        logger.event(`Removed ${relativeDirPath} successfully)`);
+        logger.event(`Removed Dir ${relativeDirPath} successfully)`);
       });
 
-    addUnWatch(() => watcher.close());
+    return watcher;
   }
 };
