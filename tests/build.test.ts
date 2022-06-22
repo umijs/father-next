@@ -3,7 +3,7 @@ import path from 'path';
 import { winPath } from '@umijs/utils';
 import * as cli from '../src/cli/cli';
 
-const CASES_DIR = path.join(__dirname, 'fixtures');
+const CASES_DIR = path.join(__dirname, 'fixtures/build');
 
 /**
  * read dist directory to file map
