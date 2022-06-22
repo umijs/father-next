@@ -4,7 +4,6 @@ import { winPath } from '@umijs/utils';
 
 // save original methods of fs
 const oFs = Object.keys(fs).reduce((r, k) => {
-  // @ts-ignore
   r[k] = fs[k];
   return r;
 }, {});
@@ -15,7 +14,6 @@ const oFs = Object.keys(fs).reduce((r, k) => {
  */
 export function restoreFsMethods() {
   Object.keys(oFs).forEach((k) => {
-    // @ts-ignore
     if (oFs[k] !== fs[k]) fs[k] = oFs[k];
   });
 }
