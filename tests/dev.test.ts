@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { distToMap } from './utils';
+import { WATCH_DEBOUNCE_STEP } from '../src/constants';
 import * as cli from '../src/cli/cli';
 
 const CASE_DIR = path.join(__dirname, 'fixtures/dev');
@@ -116,7 +117,7 @@ test('dev: file change', async () => {
   );
 
   // wait for watch debounce and compile
-  await wait(200);
+  await wait(WATCH_DEBOUNCE_STEP + 200);
 
   const fileMap = distToMap(CASE_DIST);
 
@@ -128,7 +129,7 @@ test('dev: file add', async () => {
   fs.writeFileSync(path.join(CASE_SRC, 'child/new.ts'), '', 'utf-8');
 
   // wait for watch debounce and compile
-  await wait(200);
+  await wait(WATCH_DEBOUNCE_STEP + 200);
 
   const fileMap = distToMap(CASE_DIST);
 
@@ -140,7 +141,7 @@ test('dev: file delete', async () => {
   fs.rmSync(path.join(CASE_SRC, 'child'), { recursive: true });
 
   // wait for watch debounce and compile
-  await wait(200);
+  await wait(WATCH_DEBOUNCE_STEP + 200);
 
   const fileMap = distToMap(CASE_DIST);
 
