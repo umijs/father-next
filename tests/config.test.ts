@@ -45,6 +45,7 @@ test('config: cyclic extends', async () => {
 
   // restore mock
   jest.unmock('@umijs/utils');
+  delete global.TMP_CASE_CONFIG;
 });
 
 test('config: nonexistent extends', async () => {
