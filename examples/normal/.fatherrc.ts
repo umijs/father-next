@@ -1,4 +1,4 @@
-import { defineConfig } from '../../src/defineConfig';
+import { defineConfig } from 'father';
 const path = require('path');
 
 export default defineConfig({
