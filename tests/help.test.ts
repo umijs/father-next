@@ -1,9 +1,11 @@
 import * as cli from '../src/cli/cli';
 
-const spy = jest.spyOn(console, 'log');
+const logSpy = jest.spyOn(console, 'log');
+const errorSpy = jest.spyOn(console, 'error');
 
 afterAll(() => {
-  spy.mockRestore();
+  logSpy.mockRestore();
+  errorSpy.mockRestore();
 });
 
 test('help: all commands', async () => {
@@ -21,5 +23,16 @@ test('help: build sub command', async () => {
 
   expect(console.log).toHaveBeenCalledWith(
     expect.stringContaining('--no-clean'),
+  );
+});
+
+test('help: invalid sub command', async () => {
+  await cli.run({
+    args: { _: ['help', 'invalid'], $0: 'node' },
+  });
+
+  expect(console.error).toHaveBeenCalledWith(
+    expect.any(String),
+    expect.stringContaining('Invalid'),
   );
 });
