@@ -1,5 +1,4 @@
 import { IApi } from '../types';
-import { logger } from '@umijs/utils';
 
 export default (api: IApi) => {
   api.registerCommand({
@@ -27,7 +26,7 @@ export default (api: IApi) => {
           } catch (error) {}
         });
         versions.forEach((version) => {
-          logger.info(`Version: ${version}`);
+          console.log(`Version: ${version}`);
         });
       }
       return version;

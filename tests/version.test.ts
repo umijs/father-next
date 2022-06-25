@@ -6,9 +6,6 @@ test(`version`, async () => {
     args: { _: ['version'], $0: 'node' },
   });
   const version = require('../package.json').version;
-  expect(global.console.log).toHaveBeenCalledWith(
-    `\u001B[36minfo\u001B[39m  -`,
-    `Version: father@${version}`,
-  );
+  expect(global.console.log).toHaveBeenCalledWith(`Version: father@${version}`);
   spy.mockRestore();
 });
