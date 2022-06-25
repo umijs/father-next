@@ -10,7 +10,7 @@ export default (api: IApi) => {
         userConfig: api.config,
         cwd: api.cwd,
         pkg: api.pkg,
-        noClean: !!args._.includes('--no-clean'),
+        clean: args.clean,
       });
     },
   });

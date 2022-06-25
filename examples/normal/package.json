@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "../../bin/father.js build",
-    "build:noClean": "../../bin/father.js build --  --no-clean",
+    "build:no-clean": "../../bin/father.js build --no-clean",
     "version": "../../bin/father.js version"
   }
 }

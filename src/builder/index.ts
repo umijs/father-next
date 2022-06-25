@@ -29,7 +29,7 @@ interface IBuilderOpts {
   userConfig: IFatherConfig;
   cwd: string;
   pkg: IApi['pkg'];
-  noClean?: boolean;
+  clean?: boolean;
 }
 
 interface IWatchBuilderResult {
@@ -49,7 +49,7 @@ async function builder(
   const outputs = getProviderOutputs(configProviders);
   const watchers: chokidar.FSWatcher[] = [];
 
-  if (!opts.noClean) {
+  if (opts.clean !== false) {
     // clean output directories
     logger.info('Clean output directories');
     outputs.forEach((output) => {
