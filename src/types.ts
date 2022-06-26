@@ -34,6 +34,8 @@ export enum IFatherBundlessTypes {
   CJS = 'cjs',
 }
 
+type IBabelPlugin = Function | string | [string, { [key: string]: any }];
+
 export interface IFatherBaseConfig {
   /**
    * compile platform
@@ -53,27 +55,23 @@ export interface IFatherBaseConfig {
 
   /**
    * configure postcss
-   * @todo  real type definition
    */
-  postcssOptions?: any;
+  postcssOptions?: Record<string, any>;
 
   /**
    * configure autoprefixer
-   * @todo  real type definition
    */
-  autoprefixer?: any;
+  autoprefixer?: Record<string, any>;
 
   /**
    * configure extra babel presets
-   * @todo  real type definition
    */
-  extraBabelPresets?: any[];
+  extraBabelPresets?: IBabelPlugin[];
 
   /**
    * configure extra babel plugins
-   * @todo  real type definition
    */
-  extraBabelPlugins?: any[];
+  extraBabelPlugins?: IBabelPlugin[];
 }
 
 export interface IFatherBundlessConfig extends IFatherBaseConfig {
@@ -132,9 +130,8 @@ export interface IFatherBundleConfig extends IFatherBaseConfig {
 
   /**
    * modify webpack config via webpack-chain
-   * @todo  real type definition
    */
-  chainWebpack?: (args: any) => any;
+  chainWebpack?: (memo: any, args: any) => void;
 }
 
 export interface IFatherPreBundleConfig {
