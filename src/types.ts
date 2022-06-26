@@ -1,4 +1,8 @@
 import type { IServicePluginAPI, PluginAPI } from '@umijs/core';
+import type { IConfig as IBundlerWebpackConfig } from '@umijs/bundler-webpack/dist/types';
+import type Autoprefixer from '@umijs/bundler-webpack/compiled/autoprefixer';
+import type IWebpackChain from '@umijs/bundler-webpack/compiled/webpack-5-chain';
+import type { Compiler } from '@umijs/bundler-webpack';
 import type { ITransformerItem } from './builder/bundless/loaders/javascript';
 
 export type {
@@ -34,8 +38,6 @@ export enum IFatherBundlessTypes {
   CJS = 'cjs',
 }
 
-type IBabelPlugin = Function | string | [string, { [key: string]: any }];
-
 export interface IFatherBaseConfig {
   /**
    * compile platform
@@ -56,22 +58,22 @@ export interface IFatherBaseConfig {
   /**
    * configure postcss
    */
-  postcssOptions?: Record<string, any>;
+  postcssOptions?: IBundlerWebpackConfig['postcssLoader'];
 
   /**
    * configure autoprefixer
    */
-  autoprefixer?: Record<string, any>;
+  autoprefixer?: Autoprefixer.Options;
 
   /**
    * configure extra babel presets
    */
-  extraBabelPresets?: IBabelPlugin[];
+  extraBabelPresets?: IBundlerWebpackConfig['extraBabelPresets'];
 
   /**
    * configure extra babel plugins
    */
-  extraBabelPlugins?: IBabelPlugin[];
+  extraBabelPlugins?: IBundlerWebpackConfig['extraBabelPlugins'];
 }
 
 export interface IFatherBundlessConfig extends IFatherBaseConfig {
@@ -131,7 +133,10 @@ export interface IFatherBundleConfig extends IFatherBaseConfig {
   /**
    * modify webpack config via webpack-chain
    */
-  chainWebpack?: (memo: any, args: any) => void;
+  chainWebpack?: (
+    memo: IWebpackChain,
+    args: { env: string; webpack: Compiler['webpack'] },
+  ) => void;
 }
 
 export interface IFatherPreBundleConfig {
