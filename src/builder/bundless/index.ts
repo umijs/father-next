@@ -96,7 +96,7 @@ async function transformFiles(
       );
       count += 1;
     } else {
-      debugLog(`Cannot match the config of ${chalk.gray(item)}`);
+      debugLog(`No config matches ${chalk.gray(item)}, skip`);
     }
   }
 
