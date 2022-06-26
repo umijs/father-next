@@ -136,7 +136,7 @@ export interface IFatherBundleConfig extends IFatherBaseConfig {
   chainWebpack?: (
     memo: IWebpackChain,
     args: { env: string; webpack: Compiler['webpack'] },
-  ) => void;
+  ) => IWebpackChain;
 }
 
 export interface IFatherPreBundleConfig {
