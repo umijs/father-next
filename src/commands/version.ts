@@ -16,9 +16,8 @@ export default (api: IApi) => {
         // @umijs/bundler-webpack
         const bundlerParts = ['webpack'];
         utilsParts.forEach((part) => {
-          let version = 'unknown';
           const utilsPkg = require('@umijs/bundler-utils/package.json');
-          version =
+          const version =
             utilsPkg.devDependencies[part] || utilsPkg.dependencies[part];
           versions.push(`${part}@${version}`);
         });
@@ -26,9 +25,8 @@ export default (api: IApi) => {
           versions.push(`${part}@${require(`${part}/package.json`).version}`);
         });
         bundlerParts.forEach((part) => {
-          let version = 'unknown';
           const webpackPkg = require('@umijs/bundler-webpack/package.json');
-          version =
+          const version =
             webpackPkg.devDependencies[part] || webpackPkg.dependencies[part];
           versions.push(`${part}@${version}`);
         });
