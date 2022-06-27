@@ -86,7 +86,7 @@ export function convertAliasByTsconfigPaths(cwd: string) {
       }
     });
 
-    logger.debug('absolutePaths', paths, absolutePaths);
+    console.log('absolutePaths', paths, absolutePaths);
   }
 
   return alias;
