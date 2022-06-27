@@ -162,6 +162,7 @@ async function bundless(
         cwd: opts.cwd,
         ignoreInitial: true,
         ignored: DEFAULT_BUNDLESS_IGNORES,
+        awaitWriteFinish: true,
       })
       .on('add', (rltFilePath) => {
         transformFiles([rltFilePath], opts);
