@@ -73,8 +73,6 @@ export function convertAliasByTsconfigPaths(cwd: string) {
       true,
     );
 
-    console.log('convertAliasByTsconfigPaths absolutePaths', absolutePaths);
-
     absolutePaths = absolutePaths.filter((path) => path.pattern !== '*');
 
     absolutePaths.forEach((entry) => {
@@ -86,23 +84,8 @@ export function convertAliasByTsconfigPaths(cwd: string) {
       } else {
         alias[entry.pattern] = winPath(physicalPathPattern);
       }
-
-      console.log(
-        'convertAliasByTsconfigPaths entry.pattern',
-        entry.pattern,
-        physicalPathPattern,
-        winPath(physicalPathPattern),
-      );
     });
-
-    console.log(
-      'convertAliasByTsconfigPaths absolutePaths',
-      paths,
-      absolutePaths,
-    );
   }
-
-  console.log('convertAliasByTsconfigPaths alias', alias);
 
   return alias;
 }
