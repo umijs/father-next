@@ -34,7 +34,14 @@ function getBundlessSchemas(Joi: Root) {
     input: Joi.string(),
     output: Joi.string(),
     transformer: Joi.string(),
-    overrides: Joi.object(),
+    overrides: Joi.object().pattern(
+      Joi.string(),
+      Joi.link('/').concat(
+        Joi.object({
+          input: Joi.any().forbidden(),
+        }),
+      ),
+    ),
     ignores: Joi.array().items(Joi.string()),
   });
 }
