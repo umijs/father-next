@@ -63,8 +63,6 @@ export function convertAliasByTsconfigPaths(cwd: string) {
   const config = loadConfig(cwd);
   let alias: Record<string, string> = {};
 
-  console.log('convertAliasByTsconfigPaths loadConfig', config);
-
   if (config.resultType === 'success') {
     const { absoluteBaseUrl, paths } = config;
     logger.info(`convert tsconfig paths to alias`);
@@ -81,13 +79,20 @@ export function convertAliasByTsconfigPaths(cwd: string) {
 
     absolutePaths.forEach((entry) => {
       const [physicalPathPattern] = entry.paths;
-      if (winPath(entry.pattern).endsWith(winPath('/*'))) {
-        alias[winPath(entry.pattern.replace(winPath('/*'), ''))] = winPath(
-          physicalPathPattern.replace(winPath('/*'), ''),
+      if (entry.pattern.endsWith('/*')) {
+        alias[entry.pattern.replace('/*', '')] = physicalPathPattern.replace(
+          '/*',
+          '',
         );
       } else {
-        alias[winPath(entry.pattern)] = winPath(physicalPathPattern);
+        alias[entry.pattern] = physicalPathPattern;
       }
+
+      console.log(
+        'convertAliasByTsconfigPaths entry.pattern',
+        entry.pattern,
+        physicalPathPattern,
+      );
     });
 
     console.log(
