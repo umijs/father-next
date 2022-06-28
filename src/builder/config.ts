@@ -65,7 +65,6 @@ export function convertAliasByTsconfigPaths(cwd: string) {
 
   if (config.resultType === 'success') {
     const { absoluteBaseUrl, paths } = config;
-    logger.info(`convert tsconfig paths to alias`);
 
     let absolutePaths = MappingEntry.getAbsoluteMappingEntries(
       absoluteBaseUrl,
@@ -73,15 +72,13 @@ export function convertAliasByTsconfigPaths(cwd: string) {
       true,
     );
 
-    absolutePaths = absolutePaths.filter((path) => path.pattern !== '*');
-
     absolutePaths.forEach((entry) => {
       const [physicalPathPattern] = entry.paths;
       if (entry.pattern.endsWith('/*')) {
         alias[entry.pattern.replace('/*', '')] = winPath(
           physicalPathPattern,
         ).replace('/*', '');
-      } else {
+      } else if (entry.pattern !== '*') {
         alias[entry.pattern] = winPath(physicalPathPattern);
       }
     });
@@ -330,11 +327,11 @@ export function createConfigProviders(
 
   // convert alias from tsconfig paths
   const alias = convertAliasByTsconfigPaths(cwd);
-  logger.debug('tconfig alias', alias);
+  logger.debug('Convert alias from tsconfig.json:', alias);
 
   const { bundle, bundless } = configs.reduce(
     (r, config) => {
-      config.alias = { ...config.alias, ...(alias || {}) };
+      config.alias = { ...alias, ...config.alias };
 
       if (config.type === IFatherBuildTypes.BUNDLE) {
         r.bundle.push(config);
