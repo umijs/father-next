@@ -1,4 +1,4 @@
-import { deepmerge, logger, yParser } from '@umijs/utils';
+import { deepmerge, yParser } from '@umijs/utils';
 import { BUILD_COMMANDS, DEV_COMMAND } from '../constants';
 import { Service } from '../service/service';
 import {
@@ -35,30 +35,30 @@ export async function run(_opts?: IOpts) {
     process.env.NODE_ENV = 'production';
   }
 
-  try {
-    const service = new Service();
+  // try {
+  const service = new Service();
 
-    await service.run2({
-      name: command,
-      args: deepmerge({}, args),
-    });
+  await service.run2({
+    name: command,
+    args: deepmerge({}, args),
+  });
 
-    // handle restart for dev command
-    if (command === DEV_COMMAND) {
-      async function listener(data: any) {
-        if (data?.type === 'RESTART') {
-          // off self
-          process.off('message', listener);
+  // handle restart for dev command
+  if (command === DEV_COMMAND) {
+    async function listener(data: any) {
+      if (data?.type === 'RESTART') {
+        // off self
+        process.off('message', listener);
 
-          // restart
-          run({ args });
-        }
+        // restart
+        run({ args });
       }
-
-      process.on('message', listener);
     }
-  } catch (e: any) {
-    logger.error(e);
-    process.exit(1);
+
+    process.on('message', listener);
   }
+  // } catch (e: any) {
+  //   logger.error(e);
+  //   process.exit(1);
+  // }
 }
