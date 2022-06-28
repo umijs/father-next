@@ -59,6 +59,7 @@ const esbuildTransformer: IJSTransformer = async function () {
     bundle: true,
     format: this.config.format,
     define: this.config.define,
+    platform: this.config.platform,
     target:
       this.config.platform === IFatherPlatformTypes.NODE ? 'node14' : 'es6',
     // esbuild need relative entry path
