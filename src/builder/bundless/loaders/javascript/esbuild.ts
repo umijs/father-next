@@ -29,7 +29,7 @@ function createAliasReplacer(opts: { alias: IFatherBundlessConfig['alias'] }) {
 
     // transform to relative path
     if (absReq) {
-      let rltReq = winPath(path.relative(context, absReq));
+      const rltReq = winPath(path.relative(context, absReq));
 
       return rltReq.startsWith('..') ? rltReq : `./${rltReq}`;
     }
