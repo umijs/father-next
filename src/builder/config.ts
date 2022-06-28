@@ -80,18 +80,18 @@ export function convertAliasByTsconfigPaths(cwd: string) {
     absolutePaths.forEach((entry) => {
       const [physicalPathPattern] = entry.paths;
       if (entry.pattern.endsWith('/*')) {
-        alias[entry.pattern.replace('/*', '')] = physicalPathPattern.replace(
-          winPath('/*'),
-          '',
-        );
+        alias[entry.pattern.replace('/*', '')] = winPath(
+          physicalPathPattern,
+        ).replace('/*', '');
       } else {
-        alias[entry.pattern] = physicalPathPattern;
+        alias[entry.pattern] = winPath(physicalPathPattern);
       }
 
       console.log(
         'convertAliasByTsconfigPaths entry.pattern',
         entry.pattern,
         physicalPathPattern,
+        winPath(physicalPathPattern),
       );
     });
 
