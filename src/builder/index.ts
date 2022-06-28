@@ -1,5 +1,5 @@
+import { chokidar, logger, rimraf } from '@umijs/utils';
 import path from 'path';
-import { chokidar, rimraf, logger } from '@umijs/utils';
 import { IApi, IFatherConfig } from '../types';
 import bundle from './bundle';
 import bundless from './bundless';
@@ -45,7 +45,11 @@ function builder(
 async function builder(
   opts: IBuilderOpts & { watch?: true },
 ): Promise<IWatchBuilderResult | void> {
-  const configProviders = createConfigProviders(opts.userConfig, opts.pkg);
+  const configProviders = createConfigProviders(
+    opts.userConfig,
+    opts.pkg,
+    opts.cwd,
+  );
   const outputs = getProviderOutputs(configProviders);
   const watchers: chokidar.FSWatcher[] = [];
 

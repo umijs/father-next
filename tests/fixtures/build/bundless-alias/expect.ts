@@ -17,4 +17,9 @@ export default (files: Record<string, string>) => {
   expect(files['esm/index.js']).not.toContain('foo.tsx');
   expect(files['esm/index.js']).not.toContain('@umi/bar');
   expect(files['esm/index.js']).not.toContain('bar.jsx');
+
+  expect(files['cjs/index.js']).not.toContain('@umijs/max');
+  expect(files['cjs/index.d.ts']).not.toContain('@umijs/max');
+  expect(files['esm/index.js']).not.toContain('@umijs/max');
+  expect(files['esm/index.d.ts']).not.toContain('@umijs/max');
 };
