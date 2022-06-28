@@ -3,7 +3,6 @@ import { winPath } from '@umijs/utils';
 import path from 'path';
 import { IFatherBundlessTypes, IFatherPlatformTypes } from '../../../../types';
 import type { IJSTransformer } from '../types';
-import { removeExtension } from './utils';
 
 /**
  * parse for stringify define value, use to babel-plugin-transform-define
@@ -53,12 +52,6 @@ const babelTransformer: IJSTransformer = function (content) {
         }
       } else {
         result[name] = target;
-      }
-
-      // If the file suffix is js remove the suffix
-      const relativePath = result[name];
-      if (/\.(t|j)sx?$/.test(relativePath)) {
-        result[name] = removeExtension(relativePath);
       }
 
       return result;

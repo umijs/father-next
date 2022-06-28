@@ -3,7 +3,6 @@ import { winPath } from '@umijs/utils';
 import path from 'path';
 import { IFatherBundlessConfig, IFatherPlatformTypes } from '../../../../types';
 import type { IJSTransformer } from '../types';
-import { removeExtension } from './utils';
 
 /**
  * create a replacer for transform alias path to relative path
@@ -31,11 +30,6 @@ function createAliasReplacer(opts: { alias: IFatherBundlessConfig['alias'] }) {
     // transform to relative path
     if (absReq) {
       let rltReq = winPath(path.relative(context, absReq));
-
-      // If the file suffix is js remove the suffix
-      if (/\.(t|j)sx?$/.test(rltReq)) {
-        rltReq = removeExtension(rltReq);
-      }
 
       return rltReq.startsWith('..') ? rltReq : `./${rltReq}`;
     }
