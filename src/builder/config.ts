@@ -81,7 +81,7 @@ export function convertAliasByTsconfigPaths(cwd: string) {
       const [physicalPathPattern] = entry.paths;
       if (entry.pattern.endsWith('/*')) {
         alias[entry.pattern.replace('/*', '')] = physicalPathPattern.replace(
-          '/*',
+          winPath('/*'),
           '',
         );
       } else {
