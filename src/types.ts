@@ -56,16 +56,6 @@ export interface IFatherBaseConfig {
   alias?: Record<string, string>;
 
   /**
-   * configure postcss
-   */
-  postcssOptions?: IBundlerWebpackConfig['postcssLoader'];
-
-  /**
-   * configure autoprefixer
-   */
-  autoprefixer?: Autoprefixer.Options;
-
-  /**
    * configure extra babel presets
    */
   extraBabelPresets?: IBundlerWebpackConfig['extraBabelPresets'];
@@ -137,6 +127,16 @@ export interface IFatherBundleConfig extends IFatherBaseConfig {
     memo: IWebpackChain,
     args: { env: string; webpack: Compiler['webpack'] },
   ) => IWebpackChain;
+
+  /**
+   * configure postcss
+   */
+  postcssOptions?: IBundlerWebpackConfig['postcssLoader'];
+
+  /**
+   * configure autoprefixer
+   */
+  autoprefixer?: Autoprefixer.Options;
 }
 
 export interface IFatherPreBundleConfig {
@@ -159,7 +159,7 @@ export interface IFatherPreBundleConfig {
    * extra dependencies & declarations need to be externalized
    * @note  all deps & package.json dependencies will be added to externals by default
    */
-  extraExternals: Record<string, string>;
+  extraExternals?: Record<string, string>;
 }
 
 export interface IFatherConfig extends IFatherBaseConfig {
