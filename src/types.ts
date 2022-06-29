@@ -1,8 +1,8 @@
-import type { IServicePluginAPI, PluginAPI } from '@umijs/core';
-import type { IConfig as IBundlerWebpackConfig } from '@umijs/bundler-webpack/dist/types';
+import type { Compiler } from '@umijs/bundler-webpack';
 import type Autoprefixer from '@umijs/bundler-webpack/compiled/autoprefixer';
 import type IWebpackChain from '@umijs/bundler-webpack/compiled/webpack-5-chain';
-import type { Compiler } from '@umijs/bundler-webpack';
+import type { IConfig as IBundlerWebpackConfig } from '@umijs/bundler-webpack/dist/types';
+import type { IServicePluginAPI, PluginAPI } from '@umijs/core';
 import type { ITransformerItem } from './builder/bundless/loaders/javascript';
 
 export type {
@@ -141,11 +141,14 @@ export interface IFatherBundleConfig extends IFatherBaseConfig {
 
 export interface IFatherPreBundleConfig {
   /**
+   * output directory
+   * @default compiled
+   */
+  output?: string;
+  /**
    * dependencies or entries need to be pre-bundled
    */
-  deps:
-    | string[]
-    | Record<string, { output?: string; minify?: boolean; dts?: boolean }>;
+  deps: string[] | Record<string, { minify?: boolean; dts?: boolean }>;
 
   /**
    * extra dep declarations need to be pre-bundled

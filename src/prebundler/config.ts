@@ -1,9 +1,9 @@
-import path from 'path';
-import { winPath } from '@umijs/utils';
 import {
   ExtractorConfig,
   IExtractorConfigPrepareOptions,
 } from '@microsoft/api-extractor';
+import { winPath } from '@umijs/utils';
+import path from 'path';
 import { IApi, IFatherPreBundleConfig } from '../types';
 
 interface IPreBundleConfig {
@@ -118,7 +118,12 @@ export function getConfig(opts: {
   ).reduce((r, dep) => ({ ...r, [dep]: dep }), {});
   const depExternals: IFatherPreBundleConfig['extraExternals'] = {};
   const config: IPreBundleConfig = { deps: {}, dts: {} };
-  const { deps, extraExternals = {}, extraDtsDeps = [] } = opts.userConfig;
+  const {
+    output,
+    deps,
+    extraExternals = {},
+    extraDtsDeps = [],
+  } = opts.userConfig;
 
   // process deps config
   Object.entries(deps).forEach(([dep, depConfig]) => {
@@ -145,7 +150,7 @@ export function getConfig(opts: {
       pkg: depPkg,
       output: path.resolve(
         opts.cwd,
-        depConfig.output || `${DEFAULT_OUTPUT_DIR}/${depPkg.name}/index.js`,
+        `${output || DEFAULT_OUTPUT_DIR}/${depPkg.name}/index.js`,
       ),
     };
 
