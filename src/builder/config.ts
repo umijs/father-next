@@ -14,7 +14,6 @@ import {
   IFatherJSTransformerTypes,
   IFatherPlatformTypes,
 } from '../types';
-import { removeExtension } from './utils';
 
 /**
  * declare bundler config
@@ -357,20 +356,11 @@ export function createConfigProviders(
         r.bundle.push(config);
       } else if (config.type === IFatherBuildTypes.BUNDLESS) {
         // Handling file suffixes only bundless mode needs to be handled
-        config.alias = Object.keys(config.alias).reduce<typeof config.alias>(
-          (preAlias, target) => {
-            // If the file suffix is js remove the suffix
-            const aPath = config.alias![target];
-            if (/\.(t|j)sx?$/.test(aPath)) {
-              preAlias[target] = removeExtension(aPath);
-            } else {
-              preAlias[target] = aPath;
-            }
-
-            return preAlias;
-          },
-          {},
-        );
+        for (let target in config.alias) {
+          // If the file suffix is js remove the suffix
+          const aPath = config.alias[target];
+          config.alias![target] = aPath.replace(/\.(t|j)sx?$/, '');
+        }
 
         r.bundless[config.format].push(config);
       }
