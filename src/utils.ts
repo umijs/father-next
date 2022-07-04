@@ -54,7 +54,7 @@ export function getDepPkgPath(dep: string, cwd: string) {
 export function getNestedDepsForPkg(
   name: string,
   cwd: string,
-  externals: Record<string, string> = {},
+  externals: Record<string, string>,
   deps: Record<string, string> = {},
 ) {
   if (name in deps || externals[name]) return deps;
