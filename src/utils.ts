@@ -92,3 +92,10 @@ export function getNestedDepsForPkg(
 
   return deps;
 }
+
+export function getSecondsByMs(ms: number) {
+  if (ms < 1000) {
+    return `${ms} ms`;
+  }
+  return `${(ms / 1000).toFixed(3)} s`;
+}

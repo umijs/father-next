@@ -1,19 +1,20 @@
 import {
   chalk,
   chokidar,
+  debug,
   glob,
   lodash,
   logger,
   rimraf,
   winPath,
-  debug,
 } from '@umijs/utils';
 import fs from 'fs';
 import path from 'path';
-import { WATCH_DEBOUNCE_STEP, DEBUG_BUNDLESS_NAME } from '../../constants';
+import { DEBUG_BUNDLESS_NAME, WATCH_DEBOUNCE_STEP } from '../../constants';
+import { getSecondsByMs } from '../../utils';
+import type { BundlessConfigProvider } from '../config';
 import getDeclarations from './dts';
 import runLoaders from './loaders';
-import type { BundlessConfigProvider } from '../config';
 
 const debugLog = debug(DEBUG_BUNDLESS_NAME);
 
@@ -151,9 +152,9 @@ async function bundless(
   if (!opts.watch) {
     // output result for normal mode
     logger.event(
-      `Transformed successfully in ${
-        Date.now() - startTime
-      } ms (${count} files)`,
+      `Transformed successfully in ${getSecondsByMs(
+        Date.now() - startTime,
+      )} (${count} files)`,
     );
   } else {
     // watching for watch mode

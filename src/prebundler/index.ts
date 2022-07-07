@@ -4,6 +4,7 @@ import { chalk, logger, winPath } from '@umijs/utils';
 import ncc from '@vercel/ncc';
 import fs from 'fs';
 import path from 'path';
+import { getSecondsByMs } from '../utils';
 import { getConfig } from './config';
 import { getSharedData } from './shared';
 
@@ -106,9 +107,9 @@ export default async (opts: Parameters<typeof getConfig>[0]) => {
 
   if (count) {
     logger.event(
-      `Pre-bundled successfully in ${
-        Date.now() - startTime
-      } ms (${count} deps)`,
+      `Pre-bundled successfully in ${getSecondsByMs(
+        Date.now() - startTime,
+      )} (${count} deps)`,
     );
   }
 };
