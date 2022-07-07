@@ -23,7 +23,7 @@ father 支持以下配置项。
 - 类型：`string`
 - 默认值：`undefined`
 
-指定继承的父配置文件。
+指定继承的父配置文件路径。
 
 ### extraBabelPlugins
 
