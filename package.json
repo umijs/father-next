@@ -23,6 +23,7 @@
     "build": "pnpm tsc",
     "dev": "pnpm build --watch",
     "format": "prettier --write .",
+    "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "release": "esno scripts/release.ts",
     "test": "jest",
