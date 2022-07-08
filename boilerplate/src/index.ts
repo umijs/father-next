@@ -1,5 +1,6 @@
 import {
   BaseGenerator,
+  fsExtra,
   installWithNpmClient,
   prompts,
   yParser,
@@ -81,7 +82,10 @@ export default async ({
     ],
   });
   await generator.run();
-
+  if (platform !== 'both') {
+    fsExtra.removeSync(join(target, './src/client'));
+    fsExtra.removeSync(join(target, './src/server'));
+  }
   // install
   installWithNpmClient({ npmClient, cwd: target });
 };
