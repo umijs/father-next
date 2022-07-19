@@ -51,16 +51,18 @@ export default async ({
       },
     },
   );
-
+  const isNode = platform === 'node';
+  const isBrowser = platform === 'browser';
+  const isBothNodeBrowser = platform === 'both';
   const generator = new BaseGenerator({
     path: join(__dirname, '../template'),
     target,
     data: {
       version: version.includes('-canary.') ? version : `^${version}`,
       npmClient,
-      isNode: platform === 'node',
-      isBrowser: platform === 'browser',
-      isBothNodeBrowser: platform === 'both',
+      isNode,
+      isBrowser,
+      isBothNodeBrowser,
       registry,
     },
     questions: [
@@ -82,9 +84,12 @@ export default async ({
     ],
   });
   await generator.run();
-  if (platform !== 'both') {
+  if (isNode || isBrowser) {
     fsExtra.removeSync(join(target, './src/client'));
     fsExtra.removeSync(join(target, './src/server'));
+  }
+  if (isBothNodeBrowser) {
+    fsExtra.removeSync(join(target, './src/index.ts'));
   }
   // install
   installWithNpmClient({ npmClient, cwd: target });
