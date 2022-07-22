@@ -44,6 +44,7 @@ export default async (
   opts: { config: IBundlessConfig; pkg: IApi['pkg']; cwd: string },
 ) => {
   const cache = getCache('loader');
+  // format: {path:mtime:config}
   const cacheKey = [
     fileAbsPath,
     fs.statSync(fileAbsPath).mtimeMs,

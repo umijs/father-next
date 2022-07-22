@@ -77,6 +77,7 @@ export default async function getDeclarations(
     const cacheKeys = inputFiles.reduce<Record<string, string>>(
       (ret, file) => ({
         ...ret,
+        // format: {path:mtime:config}
         [file]: [
           file,
           fs.lstatSync(file).mtimeMs,
