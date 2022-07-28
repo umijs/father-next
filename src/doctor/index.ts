@@ -1,6 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { type IApi } from '../types';
+import {
+  IBundleConfig,
+  IBundlessConfig,
+  normalizeUserConfig as getBuildConfig,
+} from '../builder/config';
+import { getConfig as getPreBundleConfig } from '../prebundler/config';
+import { IFatherBuildTypes, type IApi } from '../types';
 
 export type IDoctorReport = {
   type: 'error' | 'warn';
@@ -22,6 +28,34 @@ export function registerRules(api: IApi) {
 }
 
 export default async (api: IApi): Promise<IDoctorReport> => {
-  api;
-  return [];
+  // generate configs
+  const [bundleConfigs, bundlessConfigs] = getBuildConfig(
+    api.config,
+    api.pkg,
+  ).reduce<[IBundleConfig[], IBundlessConfig[]]>(
+    (ret, config) => {
+      if (config.type === IFatherBuildTypes.BUNDLE) {
+        ret[0].push(config);
+      } else {
+        ret[1].push(config);
+      }
+
+      return ret;
+    },
+    [[], []],
+  );
+  const preBundleConfig = getPreBundleConfig({
+    userConfig: api.config.prebundle || {},
+    pkg: api.pkg,
+    cwd: api.cwd,
+  });
+
+  // regular checkup
+  const regularReport: IDoctorReport = await api.applyPlugins({
+    key: 'addRegularCheckup',
+    type: api.ApplyPluginsType.add,
+    args: { bundleConfigs, bundlessConfigs, preBundleConfig },
+  });
+
+  return [...regularReport.filter(Boolean)];
 };

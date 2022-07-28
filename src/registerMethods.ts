@@ -1,7 +1,7 @@
 import { IApi } from './types';
 
 export default (api: IApi) => {
-  ['addJSTransformer'].forEach((name) => {
+  ['addJSTransformer', 'addRegularCheckup'].forEach((name) => {
     api.registerMethod({ name });
   });
 };
