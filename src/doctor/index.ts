@@ -9,6 +9,7 @@ import {
 import { DEFAULT_BUNDLESS_IGNORES } from '../constants';
 import { getConfig as getPreBundleConfig } from '../prebundler/config';
 import { IFatherBuildTypes, type IApi } from '../types';
+import sourceParser from './parser';
 
 export type IDoctorReport = {
   type: 'error' | 'warn';
@@ -83,6 +84,24 @@ export default async (api: IApi): Promise<IDoctorReport> => {
     [],
   );
 
+  // collect all alias & externals
+  // TODO: split bundle & bundless checkup, because externals not work for bundle
+  const mergedAlias: Record<string, string[]> = {};
+  const mergedExternals: Record<string, true> = {};
+
+  [...bundleConfigs, ...bundlessConfigs].forEach((c) => {
+    Object.entries(c.alias || {}).forEach(([k, v]) => {
+      mergedAlias[k] ??= [];
+      mergedAlias[k].push(v);
+    });
+
+    if ('externals' in c) {
+      Object.entries(c.externals || {}).forEach(([k, v]) => {
+        mergedExternals[k] = true;
+      });
+    }
+  });
+
   // regular checkup
   const regularReport: IDoctorReport = await api.applyPlugins({
     key: 'addRegularCheckup',
@@ -104,5 +123,26 @@ export default async (api: IApi): Promise<IDoctorReport> => {
     );
   }
 
-  return [...regularReport.filter(Boolean), ...sourceReport.filter(Boolean)];
+  // imports checkup
+  const importsReport: IDoctorReport = [];
+
+  for (const file of sourceFiles) {
+    importsReport.push(
+      ...(await api.applyPlugins({
+        key: 'addImportsCheckup',
+        args: {
+          file,
+          imports: (await sourceParser(path.join(api.cwd, file))).imports,
+          mergedAlias,
+          mergedExternals,
+        },
+      })),
+    );
+  }
+
+  return [
+    ...regularReport.filter(Boolean),
+    ...sourceReport.filter(Boolean),
+    ...importsReport.filter(Boolean),
+  ];
 };

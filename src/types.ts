@@ -6,6 +6,7 @@ import type { IAdd, IServicePluginAPI, PluginAPI } from '@umijs/core';
 import type { ITransformerItem } from './builder/bundless/loaders/javascript';
 import type { IBundleConfig, IBundlessConfig } from './builder/config';
 import type { IDoctorReport } from './doctor';
+import type { IDoctorSourceParseResult } from './doctor/parser';
 import type { IPreBundleConfig } from './prebundler/config';
 
 export type {
@@ -35,6 +36,15 @@ export type IApi = PluginAPI &
       {
         file: string;
         content: string;
+      },
+      IDoctorReport | IDoctorReport[0] | void
+    >;
+    addImportsCheckup: IAdd<
+      {
+        file: string;
+        imports: IDoctorSourceParseResult['imports'];
+        mergedAlias: Record<string, string[]>;
+        mergedExternals: Record<string, string>;
       },
       IDoctorReport | IDoctorReport[0] | void
     >;
