@@ -31,6 +31,13 @@ export type IApi = PluginAPI &
       },
       IDoctorReport | IDoctorReport[0] | void
     >;
+    addSourceCheckup: IAdd<
+      {
+        file: string;
+        content: string;
+      },
+      IDoctorReport | IDoctorReport[0] | void
+    >;
   };
 
 export enum IFatherBuildTypes {
