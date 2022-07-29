@@ -2,6 +2,27 @@ import type { IDoctorReport } from '..';
 import type { IApi } from '../../types';
 
 export default (api: IApi) => {
+  let hasStyleProblem = false;
+
+  api.addSourceCheckup(({ file, content }) => {
+    if (
+      api.pkg.sideEffects === false &&
+      !hasStyleProblem &&
+      /\.(j|t)sx?$/.test(file) &&
+      /\simport\s+['"]\.[^'"]+\.(less|css|sass|scss)/.test(content)
+    ) {
+      hasStyleProblem = true;
+
+      return {
+        type: 'error',
+        problem:
+          'Source file contains style imports, and the `"sideEffects": false` will causes styles lost after tree-shaking',
+        solution:
+          'Correct `sideEffects` config in the package.json file, such as `"sideEffects": ["**/*.less"]`',
+      };
+    }
+  });
+
   api.addRegularCheckup(() => {
     if (Array.isArray(api.pkg.sideEffects)) {
       const result: IDoctorReport = [];
