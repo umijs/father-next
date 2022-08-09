@@ -49,6 +49,7 @@ export default async (
     fileAbsPath,
     fs.statSync(fileAbsPath).mtimeMs,
     JSON.stringify(opts.config),
+    process.env.NODE_ENV,
   ].join(':');
   const cacheRet = await cache.get(cacheKey, '');
 

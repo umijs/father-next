@@ -82,6 +82,7 @@ export default async function getDeclarations(
           file,
           fs.lstatSync(file).mtimeMs,
           JSON.stringify(tsconfig.options),
+          process.env.NODE_ENV,
         ].join(':'),
       }),
       {},
