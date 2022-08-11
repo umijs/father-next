@@ -70,7 +70,7 @@ export default async (opts: {
         memo.output.libraryTarget('umd');
 
         if (config?.name) {
-          memo.output.library(config?.name);
+          memo.output.library(config.name);
         }
 
         // modify webpack target
