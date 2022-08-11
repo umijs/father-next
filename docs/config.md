@@ -133,6 +133,20 @@ export default {
 };
 ```
 
+默认是全量导出 member exports，需要拆解 `default` 的话，可以通过 `chainWebpack` 配置修改 `libraryExport`，例如：
+
+```ts
+export default {
+  umd: {
+    name: 'fatherDemo',
+    chainWebpack: (memo: any) => {
+      memo.output.libraryExport('default');
+      return memo;
+    },
+  },
+};
+```
+
 #### entry
 
 - 类型：`string` | `Record<string, Config>`
