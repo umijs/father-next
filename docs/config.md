@@ -154,6 +154,19 @@ export default {
 
 指定要打包的源码入口文件，支持配置多入口、并为每个入口文件单独覆盖构建配置，例如：
 
+```ts
+export default {
+  umd: {
+    entry: {
+      'src/browser': {},
+      'src/server': {
+        platform: 'node',
+      },
+    },
+  },
+};
+```
+
 #### output
 
 - 类型：`string`
