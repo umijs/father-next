@@ -123,7 +123,7 @@ export default {
 - 类型：`string`
 - 默认值：`default`
 
-指定 umd 包的到处 library 名称，例如：
+指定 umd 包的导出 library 名称，例如：
 
 ```ts
 export default {
