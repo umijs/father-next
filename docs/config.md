@@ -118,25 +118,27 @@ export default {
 
 配置将源码打包为 UMD 产物，支持以下子配置项，也支持覆盖外部的公共配置项。
 
+#### name
+
+- 类型：`string`
+- 默认值：`default`
+
+指定 umd 包的到处 library 名称，例如：
+
+```ts
+export default {
+  umd: {
+    name: 'fatherDemo',
+  },
+};
+```
+
 #### entry
 
 - 类型：`string` | `Record<string, Config>`
 - 默认值：`src/index`
 
 指定要打包的源码入口文件，支持配置多入口、并为每个入口文件单独覆盖构建配置，例如：
-
-```ts
-export default {
-  umd: {
-    entry: {
-      'src/browser': {},
-      'src/server': {
-        platform: 'node',
-      },
-    },
-  },
-};
-```
 
 #### output
 
