@@ -54,7 +54,7 @@ export function getSchemas(): Record<string, (Joi: Root) => any> {
         output: Joi.string().optional(),
         externals: Joi.object().pattern(Joi.string(), Joi.string()),
         chainWebpack: Joi.function().optional(),
-        name: Joi.string(),
+        name: Joi.string().optional(),
       }),
     prebundle: (Joi) =>
       Joi.object({
