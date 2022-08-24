@@ -14,6 +14,8 @@
 
 father 已经尽可能地在处理这些 case，但仍然改变不了它**现阶段只能作为实验性功能**的事实，所以请谨慎在项目中使用依赖预打包能力，也欢迎将遇到的问题反馈到 [issue](https://github.com/umijs/father-next/issues/28) 中、帮助 father 改进。
 
+延伸阅读：[云谦公众号文章：coa 和依赖锁定](https://mp.weixin.qq.com/s/KbmpzvoB1yJlNDEO1p_fJQ)
+
 ## 如何构建
 
 只需要使用 `prebundle` 配置项，再执行 `father prebundle` 即可产出依赖预打包产物：

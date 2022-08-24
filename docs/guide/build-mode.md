@@ -40,7 +40,7 @@ export default {
 可以发现，在 Bundless 模式下，father 对源码的处理逻辑如下：
 
 1. TypeScript 模块会被编译为 JavaScript 模块，并且输出对应的 `.d.ts` 类型文件
-2. JavaScript 模块会被便以为 JavaScript 模块，做兼容性处理
+2. JavaScript 模块会被编译为 JavaScript 模块，做兼容性处理
 3. 其他模块会被直接拷贝输出，不做编译
 
 ### 如何选择
