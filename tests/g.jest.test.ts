@@ -1,11 +1,11 @@
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import path from 'path';
-import * as cli from '../../../src/cli/cli';
-import { GeneratorHelper } from './utils';
+import * as cli from '../src/cli/cli';
+import { GeneratorHelper } from '../src/commands/generators/utils';
 
 let useRTL = false;
-jest.doMock('./utils', () => {
-  const originalModule = jest.requireActual('./utils');
+jest.doMock('../src/commands/generators/utils', () => {
+  const originalModule = jest.requireActual('../src/commands/generators/utils');
   return {
     __esModule: true,
     ...originalModule,
@@ -18,7 +18,7 @@ jest
   .spyOn(GeneratorHelper.prototype, 'installDeps')
   .mockImplementation(mockInstall);
 
-const CASES_DIR = path.join(__dirname, '../../../tests/fixtures/generator');
+const CASES_DIR = path.join(__dirname, 'fixtures/generator');
 describe('jest generator', function () {
   process.env.APP_ROOT = path.join(CASES_DIR);
   const jestConfPath = path.join(CASES_DIR, 'jest.config.ts');
@@ -46,11 +46,9 @@ describe('jest generator', function () {
     expect(pkg['devDependencies']).toMatchObject({
       jest: '^27',
       '@types/jest': '^27',
-      '@types/node': '^18',
       typescript: '^4',
       'ts-node': '^10',
-      'ts-jest': '^27',
-      'jest-watch-typeahead': '^1.1.0',
+      '@umijs/test': '^4',
     });
     expect(mockInstall).toBeCalled();
   });
