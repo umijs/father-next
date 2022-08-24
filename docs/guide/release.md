@@ -20,7 +20,7 @@ $ npm version patch -m "build: release %s"
 
 ## 构建及发布
 
-father 4 的脚手架默认已将 [项目检查命令](./doctor.md) 及构建命令配置到 `prepublishOnly` 脚本中：
+father 4 的脚手架默认已将 [项目体检命令](./doctor.md) 及构建命令配置到 `prepublishOnly` 脚本中：
 
 ```diff
   "scripts": {

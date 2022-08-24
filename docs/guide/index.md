@@ -41,6 +41,6 @@ $ npx father build
 - [构建 ESModule 和 CommonJS 产物](./esm-cjs.md)
 - [构建 UMD 产物](./umd.md)
 - [依赖预打包](./pre-bundle.md)
-- [执行项目检查](./doctor.md)
+- [执行项目体检](./doctor.md)
 - [开发指南](./dev.md)
 - [发布指南](./release.md)
