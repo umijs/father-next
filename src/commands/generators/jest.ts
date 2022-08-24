@@ -33,15 +33,15 @@ export default (api: IApi) => {
         initial: true,
       });
 
+      const hasSrc = api.paths.absSrcPath.endsWith('src');
+
       const basicDeps = {
         jest: '^27',
         '@types/jest': '^27',
-        '@types/node': '^18',
         // we use `jest.config.ts` so jest needs ts and ts-node
         typescript: '^4',
         'ts-node': '^10',
-        'ts-jest': '^27',
-        'jest-watch-typeahead': '^1.1.0',
+        '@umijs/test': '^4',
       };
 
       const deps: Record<string, string> = res.useRTL
@@ -65,38 +65,42 @@ export default (api: IApi) => {
         logger.info('Write jest-setup.ts');
       }
 
+      const collectCoverageFrom = hasSrc
+        ? [
+            'src/**/*.{ts,js,tsx,jsx}',
+            '!src/.umi/**',
+            '!src/.umi-test/**',
+            '!src/.umi-production/**',
+          ]
+        : [
+            '**/*.{ts,tsx,js,jsx}',
+            '!.umi/**',
+            '!.umi-test/**',
+            '!.umi-production/**',
+            '!.umirc.{js,ts}',
+            '!.umirc.*.{js,ts}',
+            '!jest.config.{js,ts}',
+            '!coverage/**',
+            '!dist/**',
+            '!config/**',
+            '!mock/**',
+          ];
+
       writeFileSync(
         join(api.cwd, 'jest.config.ts'),
         `
-module.exports = {
-  preset: 'ts-jest',${
-    api.appData.config.platform !== 'node'
-      ? `
-  testEnvironment: 'jsdom',`
-      : ''
-  }
-  moduleDirectories: ['node_modules'], ${
+import { Config, createConfig } from '@umijs/test';
+
+export default {
+  ...createConfig(),${
     res.useRTL
       ? `
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],`
       : ''
   }
-  transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
-  },
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
-  collectCoverageFrom: [
-    '<rootDir>/src/**/*.{js,jsx,ts,tsx}',
-  ],
-};`.trimStart(),
+  collectCoverageFrom: [${collectCoverageFrom.map((v) => `'${v}'`).join(', ')}],
+} as Config.InitialOptions;
+`.trimStart(),
       );
 
       logger.info('Write jest.config.ts');
