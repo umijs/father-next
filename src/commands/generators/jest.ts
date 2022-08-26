@@ -33,8 +33,6 @@ export default (api: IApi) => {
         initial: true,
       });
 
-      const hasSrc = api.paths.absSrcPath.endsWith('src');
-
       const basicDeps = {
         jest: '^27',
         '@types/jest': '^27',
@@ -65,26 +63,17 @@ export default (api: IApi) => {
         logger.info('Write jest-setup.ts');
       }
 
-      const collectCoverageFrom = hasSrc
-        ? [
-            'src/**/*.{ts,js,tsx,jsx}',
-            '!src/.umi/**',
-            '!src/.umi-test/**',
-            '!src/.umi-production/**',
-          ]
-        : [
-            '**/*.{ts,tsx,js,jsx}',
-            '!.umi/**',
-            '!.umi-test/**',
-            '!.umi-production/**',
-            '!.umirc.{js,ts}',
-            '!.umirc.*.{js,ts}',
-            '!jest.config.{js,ts}',
-            '!coverage/**',
-            '!dist/**',
-            '!config/**',
-            '!mock/**',
-          ];
+      const collectCoverageFrom = ['src/**/*.{ts,js,tsx,jsx}'];
+      const hasDumi = Object.keys(api.pkg.devDependencies || {}).includes(
+        'dumi',
+      );
+      if (hasDumi) {
+        collectCoverageFrom.push(
+          '!src/.umi/**',
+          '!src/.umi-test/**',
+          '!src/.umi-production/**',
+        );
+      }
 
       writeFileSync(
         join(api.cwd, 'jest.config.ts'),
